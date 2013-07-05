@@ -21,7 +21,8 @@ module SippTest
         max_concurrent 10, desc: "Maximum concurrency for the Concurrent scenario"
         rate 1, desc: "Ramp-up rate for the Concurrent scenario"
         scenario_location 'scenarios/concurrent', desc: "Path from Adhearsion root to SippyCup template"
-        max_calls 10, desc: "Maximum number of cals for the Concurrent scenario"
+        max_calls 10, desc: "Maximum number of calls for the Concurrent scenario"
+        call_length 30, desc: "Length in seconds of calls for the Concurrent scenario"
       }
     end
 
