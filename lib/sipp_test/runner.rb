@@ -1,6 +1,5 @@
 module SippTest
   class Runner
-    attr_reader :sipp_pid
     attr_accessor :status
     def initialize(type)
       @type = type
@@ -21,7 +20,6 @@ module SippTest
     end
 
     def run_concurrent
-
     end
 
     def run_cps
