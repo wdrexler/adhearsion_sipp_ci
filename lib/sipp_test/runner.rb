@@ -31,9 +31,23 @@ module SippTest
     end
 
     def run_cps
+      self.status = :running
+      cps_config = Adhearsion.config[:sipp_test].cps
+      command = "sudo sipp -i 127.0.0.1 -p 8836 -sf #{@scenario_path} -r #{cps_config.calls_per_second} "
+      command << "-l #{cps_config.max_calls} -m #{cps_config.max_calls} -s #{@extension} 127.0.0.1 "
+      command << "-trace_stat -stf #{@csv_path} > /dev/null 2>&1"
+      p "RUNNING COMMAND:\n #{command}"
+      system command
+      self.status = :completed
     end
 
     def get_extension(type)
+      return case type
+      when :concurrent
+        "1"
+      when :cps
+        "2"
+      end
     end
   end
 end
