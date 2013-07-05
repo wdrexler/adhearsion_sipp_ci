@@ -9,6 +9,7 @@ module SippTest
     # Basic configuration for the plugin
     #
     config :sipp_test do
+      poll_rate 5, desc: "Time in seconds between SIPp stats reads"
       cps {
         max_failures 0, desc: "Number of failed calls before exit"
         calls_per_second 1, desc: "Number of calls per second (cps)"
