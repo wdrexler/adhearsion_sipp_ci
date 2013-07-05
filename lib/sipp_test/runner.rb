@@ -27,6 +27,7 @@ module SippTest
       command << "-m #{cc_config.max_calls} -s #{@extension} 127.0.0.1 "
       command << "-trace_stat -stf #{@csv_path} > /dev/null 2>&1"
       p "RUNNING COMMAND:\n #{command}"
+      start_watcher
       system command
       self.status = :completed
     end
@@ -38,6 +39,7 @@ module SippTest
       command << "-l #{cps_config.max_calls} -m #{cps_config.max_calls} -s #{@extension} 127.0.0.1 "
       command << "-trace_stat -stf #{@csv_path} > /dev/null 2>&1"
       p "RUNNING COMMAND:\n #{command}"
+      start_watcher
       system command
       self.status = :completed
     end
@@ -49,6 +51,11 @@ module SippTest
       when :cps
         "2"
       end
+    end
+
+    def start_watcher
+      w = SippTest::Watcher.new self Adhearsion.config[:sipp_test][@type].max_calls, Adhearsion.config[:sipp_test].poll_rate
+      w.run
     end
   end
 end
