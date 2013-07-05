@@ -1,6 +1,7 @@
 module SippTest
   class Runner
     attr_accessor :status
+    attr_reader :csv_path
     def initialize(type)
       @type = type
       raise ArgumentError("Type #{@type} not supported!") unless @type == :concurrent || @type == :cps
