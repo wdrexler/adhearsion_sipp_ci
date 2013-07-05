@@ -15,7 +15,7 @@ module SippTest
         sleep @polling
         p "RUNNING WATCHER"
         data = DataParser.parse(@runner.csv_path) if File.exists?(@runner.csv_path)
-        p data
+        p(data || "No data yet...")
         @current = data
         if @runner.status == :completed
           if (data[:series][0].last && (data[:series][1].last + data[:series][2].last) == @num_calls)
