@@ -65,5 +65,6 @@ Adhearsion.router do
   # Specify your call routes, directing calls with particular attributes to a controller
   #
 
-  route 'default', CPSController
+  route 'concurrent', ConcurrentController, to: /1/
+  route 'cps', CPSController, to: /2/
 end
