@@ -2,6 +2,7 @@
 
 class ConcurrentController < Adhearsion::CallController
   def run
+    answer
     loop do
       play 'tt-monkeys'
     end
