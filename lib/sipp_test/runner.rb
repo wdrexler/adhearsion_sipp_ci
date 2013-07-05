@@ -7,7 +7,7 @@ module SippTest
       @scenario_path = "#{Adhearsion.config[:platform].root}/#{Adhearsion.config[:sipp_test][@type].scenario_location}.xml"
       @csv_path = "#{Adhearsion.config[:platform].root}/scenarios/#{Time.new.strftime("%Y%m%d%H%M%S")}-#{@type}.csv"
       @extension = get_extension @type
-      self.status = :stopped
+      self.status = :new
     end
 
     def run
@@ -20,6 +20,14 @@ module SippTest
     end
 
     def run_concurrent
+      self.status = :running
+      cc_config = Adhearsion.config[:sipp_test].concurrent
+      command = "sudo sipp -i 127.0.0.1 -p 8836 -sf #{@scenario_path} -r #{cc_config.rate} -l #{cc_config.max_concurrent} "
+      command << "-m #{cc_config.max_calls} -s #{@extension} 127.0.0.1 "
+      command << "-trace_stat -stf #{@csv_path} > /dev/null 2>&1"
+      p "RUNNING COMMAND:\n #{command}"
+      system command
+      self.status = :completed
     end
 
     def run_cps
