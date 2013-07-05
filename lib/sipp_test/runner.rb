@@ -6,7 +6,7 @@ module SippTest
       @type = type
       raise ArgumentError("Type #{@type} not supported!") unless @type == :concurrent || @type == :cps
       @scenario_path = "#{Adhearsion.config[:platform].root}/#{Adhearsion.config[:sipp_test][@type].scenario_location}.xml"
-      @csv_path = "#{Adhearsion.config[:platform].root}/scenarios/#{Time.new.strftime("%Y%m%d%H%M%S")}-#{@type}.csv"
+      @csv_path = "#{Adhearsion.config[:platform].root}/results/#{Time.new.strftime("%Y%m%d%H%M%S")}-#{@type}.csv"
       @extension = get_extension @type
       self.status = :new
     end
