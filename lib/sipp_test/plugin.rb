@@ -9,7 +9,16 @@ module SippTest
     # Basic configuration for the plugin
     #
     config :sipp_test do
-      greeting "Hello", :desc => "What to use to greet users"
+      cps {
+        max_failures 0, desc: "Number of failed calls before exit"
+        calls_per_second 1, desc: "Number of calls per second (cps)"
+        scenario_location 'scenarios/cps', desc: "Path from Adhearsion root to SippyCup template"
+      }
+      concurrent {
+        max_failures 0, desc: "Number of failed calls before exit"
+        max_concurrent 10, desc: "Maximum concurrency"
+        scenario_location 'scenarios/concurrent', desc: "Path from Adhearsion root to SippyCup template"
+      }
     end
 
     # Defining a Rake task is easy
