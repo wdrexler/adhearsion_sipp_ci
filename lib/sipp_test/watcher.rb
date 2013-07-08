@@ -9,31 +9,26 @@ module SippTest
     end
 
     def watch
-      @current = DataParser.parse(path) if File.exists?(path)
+      @current = DataParser.parse(@runner.csv_path) if File.exists?(@runner.csv_path)
       @running = true
       while @running do
         sleep @polling
-        p "RUNNING WATCHER"
         data = DataParser.parse(@runner.csv_path) if File.exists?(@runner.csv_path)
-        p(data || "No data yet...")
         @current = data
-        if @runner.status == :completed
-          if (data[:series][0].last && (data[:series][1].last + data[:series][2].last) == @num_calls)
-            examine_data
-          else
-            raise "Test failed after #{data[:time]} seconds: Expected #{num_of_calls} calls, got #{data[:series][0].last} calls"
-          end
+        if (data[:series][0].last && (data[:series][1].last + data[:series][2].last) == @num_calls)
+          examine_data
+          @running = false
         end
       end
     end
 
     def examine_data
-      max_failures = Adhearsion.config[:sipp_test][@type].max_failures
-      raise "Test failed after #{@current[:time]} seconds: Number of failures (#{@current[:series][2]}) exceeds maximum (#{max_failures})." if @current[:series][2] > max_failures
-      p "Test completed successfully in #{@current[:time]} seconds."
-      p "Total Calls:      #{@current[:series][0]}"
-      p "Successful Calls: #{@current[:series][1]}"
-      p "Failed Calls:     #{@current[:series][2]}"
+      max_failures = Adhearsion.config[:sipp_test][@runner.type].max_failures
+      raise "Test failed after #{@current[:time].last}: Number of failures (#{@current[:series][2].last}) exceeds maximum (#{max_failures})." if @current[:series][2].last > max_failures
+      p "Test completed successfully in #{@current[:time].last} seconds."
+      p "Total Calls:      #{@current[:series][0].last}"
+      p "Successful Calls: #{@current[:series][1].last}"
+      p "Failed Calls:     #{@current[:series][2].last}"
     end
   end
 end

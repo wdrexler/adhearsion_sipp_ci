@@ -13,10 +13,10 @@ module SippTest
             total_step = row["TotalCallCreated"].to_i
             success_step = row["SuccessfulCall(C)"].to_i
             failed_step = row["FailedCall(C)"].to_i
-            elapsed << [step, row["ElapsedTime(C)"]]
-            total << [step, total_step]
-            success << [step, success_step]
-            failed << [step, failed_step]
+            elapsed << row["ElapsedTime(C)"]
+            total << total_step
+            success << success_step
+            failed << failed_step
             step += 1
           end
         end
