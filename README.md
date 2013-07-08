@@ -26,38 +26,40 @@ The scenarios (Ruby scripts in the `scenarios/` directory) use the [SippyCup](ht
 
 The `sipp_test` Adhearsion plugin adds some new configuration options that help define the nature of each test. The configuration options supplied are:
 
-```
-config.sipp_test.concurrent
-    # Length in seconds of calls for the Concurrent scenario [AHN_SIPP_TEST_CONCURRENT_CALL_LENGTH]
-    config.sipp_test.concurrent.call_length       = 30
+### config.sipp_test.concurrent
+<dl>
+  <dt>config.sipp_test.concurrent.call_length</dt>
+  <dd>Length in seconds of calls for the Concurrent scenario [AHN_SIPP_TEST_CONCURRENT_CALL_LENGTH]</dd>
 
-    # Maximum number of calls for the Concurrent scenario [AHN_SIPP_TEST_CONCURRENT_MAX_CALLS]
-    config.sipp_test.concurrent.max_calls         = 10
+  <dt>config.sipp_test.concurrent.max_calls</dt>
+  <dd>Maximum number of calls for the Concurrent scenario [AHN_SIPP_TEST_CONCURRENT_MAX_CALLS]</dd>
 
-    # Maximum concurrency for the Concurrent scenario [AHN_SIPP_TEST_CONCURRENT_MAX_CONCURRENT]
-    config.sipp_test.concurrent.max_concurrent    = 10
+  <dt>config.sipp_test.concurrent.max_concurrent</dt>
+  <dd>Maximum concurrency for the Concurrent scenario [AHN_SIPP_TEST_CONCURRENT_MAX_CONCURRENT]</dd>
+    
+  <dt>config.sipp_test.concurrent.max_failures</dt>
+  <dd>Number of failed calls before exit [AHN_SIPP_TEST_CONCURRENT_MAX_FAILURES]</dd>
 
-    # Number of failed calls before exit [AHN_SIPP_TEST_CONCURRENT_MAX_FAILURES]
-    config.sipp_test.concurrent.max_failures      = 0
+  <dt>config.sipp_test.concurrent.rate</dt>
+  <dd>Ramp-up rate for the Concurrent scenario [AHN_SIPP_TEST_CONCURRENT_RATE]</dd>
 
-    # Ramp-up rate for the Concurrent scenario [AHN_SIPP_TEST_CONCURRENT_RATE]
-    config.sipp_test.concurrent.rate              = 1
+  <dt>config.sipp_test.concurrent.scenario_location</dt>
+  <dd>Path from Adhearsion root to SippyCup template [AHN_SIPP_TEST_CONCURRENT_SCENARIO_LOCATION]</dd>
+</dl>
 
-    # Path from Adhearsion root to SippyCup template [AHN_SIPP_TEST_CONCURRENT_SCENARIO_LOCATION]
-    config.sipp_test.concurrent.scenario_location = "scenarios/concurrent"
+### config.sipp_test.cps
+<dl>
+  <dt>config.sipp_test.cps.calls_per_second</dt>
+  <dd>Number of calls per second (cps) [AHN_SIPP_TEST_CPS_CALLS_PER_SECOND]</dd>
+  
+  <dt>config.sipp_test.cps.max_calls</dt>
+  <dd>Maximum number of calls for the CPS scenario [AHN_SIPP_TEST_CPS_MAX_CALLS]</dd>
+  
+  <dt>config.sipp_test.cps.max_failures</dt>
+  <dd>Number of failed calls before exit [AHN_SIPP_TEST_CPS_MAX_FAILURES]</dd>
+  
+  <dt>config.sipp_test.cps.scenario_location</dt>
+  <dd>Path from Adhearsion root to SippyCup template [AHN_SIPP_TEST_CPS_SCENARIO_LOCATION]</dd>
+</dl>
 
-config.sipp_test.cps
-    # Number of calls per second (cps) [AHN_SIPP_TEST_CPS_CALLS_PER_SECOND]
-    config.sipp_test.cps.calls_per_second         = 1
-
-    # Maximum number of calls for the CPS scenario [AHN_SIPP_TEST_CPS_MAX_CALLS]
-    config.sipp_test.cps.max_calls                = 10
-
-    # Number of failed calls before exit [AHN_SIPP_TEST_CPS_MAX_FAILURES]
-    config.sipp_test.cps.max_failures             = 0
-
-    # Path from Adhearsion root to SippyCup template [AHN_SIPP_TEST_CPS_SCENARIO_LOCATION]
-    config.sipp_test.cps.scenario_location        = "scenarios/cps"
-```
-
-These configuration options may be specified either via `config/adhearsion.rb` or via environment variables.
+These configuration options may be specified either via `config/adhearsion.rb` or via environment variables. The defaults for these variables may be seen by running `bundle exec rake config:show`.  All available rake tasks can be seen by running `bundle exec rake -T`
