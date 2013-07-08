@@ -26,6 +26,14 @@ The scenarios (Ruby scripts in the `scenarios/` directory) use the [SippyCup](ht
 
 The `sipp_test` Adhearsion plugin adds some new configuration options that help define the nature of each test. The configuration options supplied are:
 
+### config.sipp_test
+<dl>
+  <dt>config.sipp_test.from_ip</dt>
+  <dd>The IP address from which to send calls (binds to an interface, default "127.0.0.1") [AHN_SIPP_TEST_FROM_IP]</dd>
+  <dt>config.sipp_test.to_ip</dt>
+  <dd>The IP address to which to send calls (default "127.0.0.1") [AHN_SIPP_TEST_TO_IP]</dd>
+</dl>
+
 ### config.sipp_test.concurrent
 <dl>
   <dt>config.sipp_test.concurrent.call_length</dt>
