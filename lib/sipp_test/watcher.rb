@@ -15,6 +15,7 @@ module SippTest
         sleep @polling
         data = DataParser.parse(@runner.csv_path) if File.exists?(@runner.csv_path)
         @current = data
+        next unless data
         if (data[:series][0].last && (data[:series][1].last + data[:series][2].last) == @num_calls)
           examine_data
           @running = false
