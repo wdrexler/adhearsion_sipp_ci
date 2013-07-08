@@ -28,7 +28,11 @@ namespace :sipp_test do
       [:concurrent, :cps].each do |type|
         SippTest::Runner.new(type).run
       end
-    ensure
+    rescue => e
+      p e.inspect
+      `kill #{pid}`
+      exit 1
+    else
       `kill #{pid}`
     end
   end
@@ -41,7 +45,11 @@ namespace :sipp_test do
     sleep 10
     begin
       SippTest::Runner.new(:concurrent).run
-    ensure
+    rescue => e
+      p e.inspect
+      `kill #{pid}`
+      exit 1
+    else
       `kill #{pid}`
     end
   end
@@ -54,7 +62,11 @@ namespace :sipp_test do
     sleep 10
     begin
       SippTest::Runner.new(:cps).run
-    ensure
+    rescue => e
+      p e.inspect
+      `kill #{pid}`
+      exit 1
+    else
       `kill #{pid}`
     end
   end
