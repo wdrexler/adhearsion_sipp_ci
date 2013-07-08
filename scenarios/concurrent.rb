@@ -1,6 +1,6 @@
 require 'sippy_cup'
 
-scenario = SippyCup::Scenario.new 'Concurrent', source: "127.0.0.1:8836", destination: "127.0.0.1:5060", file: "scenarios/concurrent" do |s|
+scenario = SippyCup::Scenario.new 'Concurrent', source: "127.0.0.1:8836", destination: "127.0.0.1:5060", filename: "scenarios/concurrent" do |s|
   s.invite
   s.receive_trying
   s.receive_ringing
