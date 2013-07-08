@@ -1,6 +1,6 @@
 SippTest = Module.new
-require "sipp_test/version"
-require "sipp_test/plugin"
-require "sipp_test/data_parser"
-require "sipp_test/watcher"
-require "sipp_test/runner"
+require_relative "sipp_test/version"
+require_relative "sipp_test/plugin"
+require_relative "sipp_test/data_parser"
+require_relative "sipp_test/watcher"
+require_relative "sipp_test/runner"
