@@ -23,8 +23,9 @@ module SippTest
     def run_concurrent
       self.status = :running
       cc_config = Adhearsion.config[:sipp_test].concurrent
-      command = "sudo sipp -i 127.0.0.1 -p 8836 -sf #{@scenario_path} -r #{cc_config.rate} -l #{cc_config.max_concurrent} "
-      command << "-m #{cc_config.max_calls} -s #{@extension} 127.0.0.1 "
+      sipp_config = Adhearsion.config[:sipp_test]
+      command = "sudo sipp -i #{sipp_config.from_ip} -p 8836 -sf #{@scenario_path} -r #{cc_config.rate} -l #{cc_config.max_concurrent} "
+      command << "-m #{cc_config.max_calls} -s #{@extension} #{sipp_config.to_ip} "
       command << "-trace_stat -stf #{@csv_path} -trace_err > /dev/null 2>&1"
       p "RUNNING COMMAND:\n #{command}"
       spawn command
@@ -35,8 +36,9 @@ module SippTest
     def run_cps
       self.status = :running
       cps_config = Adhearsion.config[:sipp_test].cps
-      command = "sudo sipp -i 127.0.0.1 -p 8836 -sf #{@scenario_path} -r #{cps_config.calls_per_second} "
-      command << "-l #{cps_config.max_calls} -m #{cps_config.max_calls} -s #{@extension} 127.0.0.1 "
+      sipp_config = Adhearsion.config[:sipp_test]
+      command = "sudo sipp -i #{sipp_config.from_ip} -p 8836 -sf #{@scenario_path} -r #{cps_config.calls_per_second} "
+      command << "-l #{cps_config.max_calls} -m #{cps_config.max_calls} -s #{@extension} #{sipp_config.to_ip} "
       command << "-trace_stat -stf #{@csv_path} > /dev/null 2>&1"
       p "RUNNING COMMAND:\n #{command}"
       spawn command
