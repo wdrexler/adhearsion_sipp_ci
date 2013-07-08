@@ -1,6 +1,6 @@
 require 'sippy_cup'
 
-scenario = SippyCup::Scenario.new 'CPS', source: "127.0.0.1:8836", destination: "127.0.0.1:5060"  do |s|
+scenario = SippyCup::Scenario.new 'CPS', source: "127.0.0.1:8836", destination: "127.0.0.1:5060", filename: "scenarios/cps"  do |s|
   s.invite
   s.receive_trying
   s.receive_ringing
