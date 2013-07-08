@@ -55,7 +55,7 @@ module SippTest
 
     def start_watcher
       w = SippTest::Watcher.new self, Adhearsion.config[:sipp_test][@type].max_calls, Adhearsion.config[:sipp_test].poll_rate
-      w.run
+      w.watch
     end
   end
 end
