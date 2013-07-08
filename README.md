@@ -1,56 +1,63 @@
-# Welcome to Adhearsion
+# adhearsion_sipp_ci
 
-You've got a fresh app and you're almost ready to get started. Firstly, you'll need to configure your VoIP platform:
+This application runs SIPp loadtests through a rake task, and is suitable for load testing through CI.
 
-## Asterisk
+## Getting Started
 
-Edit `extensions.conf` to include the following:
+The following steps will run a SIPp load test of Adhearsion:
 
-```
-[your_context_name]
-exten => _.,1,AGI(agi:async)
-```
+1. Get Asterisk
+2. Configure Asterisk to accept calls from sipp@localhost
+3. [Configure Asterisk for use with Adhearsion](http://adhearsion.com/docs/getting-started/asterisk)
+4. Clone this repository
+5. Place any necessary configuration in `config/adhearsion.rb`
+6. `bundle exec rake sipp_test:compile`
+7. `bundle exec rake sipp_test:run`
 
-and setup a user in `manager.conf` with read/write access to `all`.
+Then wait for your results.  Unless any controllers and/or SippyCup scenario files have been changed, only step 7 needs to be repeated for any future testing.
 
-If you are using Asterisk 1.8, you will need to add an additional context with the name `adhearsion-redirect`. On Asterisk 10 and above this is auto-provisioned.
+## Changing controllers and scenarios
 
-## FreeSWITCH
+Controllers for `concurrent` and `cps` scenarios are Adhearsion CallControllers, and may be changed as such.  
 
-* Ensure that mod_event_socket is installed, and configure it in autoload_configs/event_socket.conf.xml to taste
-* Add an extension to your dialplan like so:
+The scenarios (Ruby scripts in the `scenarios/` directory) use the [SippyCup](https://github.com/bklang/sippy_cup) library.  These scripts may be changed to reflect any changes made to the controllers. Once changes have been made, run `bundle exec rake sipp_test:compile` to generate the necessary XML and PCAP files.
 
-```xml
-<extension name='Adhearsion'>
-  <condition field="destination_number" expression="^10$">
-    <action application="set" data="hangup_after_bridge=false"/>
-    <action application="set" data="park_after_bridge=true"/>
-    <action application='park'/>
-  </condition>
-</extension>
-```
+## Configuration Options
 
-## Voxeo PRISM
-
-Install the [rayo-server](https://github.com/rayo/rayo-server) app into PRISM 11 and follow the [configuration guide](https://github.com/rayo/rayo-server/wiki/Single-node-and-cluster-configuration-reference).
-
-## Configure your app
-
-In `config/adhearsion.rb` you'll need to set the VoIP platform you're using, along with the correct credentials. You'll find example config there, so follow the comments.
-
-## Ready, set, go!
-
-Start your new app with "ahn start". You'll get a lovely console and should be presented with the SimonGame when you call in.
-
-### Running your app on heroku
-
-In order to run an adhearsion application on Heroku, you must create the application on the 'cedar' stack (`heroku apps:create --stack cedar`) and re-scale your processes like so:
+The `sipp_test` Adhearsion plugin adds some new configuration options that help define the nature of each test. The configuration options supplied are:
 
 ```
-heroku ps:scale web=0
-heroku ps:scale ahn=1
+config.sipp_test.concurrent
+    # Length in seconds of calls for the Concurrent scenario [AHN_SIPP_TEST_CONCURRENT_CALL_LENGTH]
+    config.sipp_test.concurrent.call_length       = 30
+
+    # Maximum number of calls for the Concurrent scenario [AHN_SIPP_TEST_CONCURRENT_MAX_CALLS]
+    config.sipp_test.concurrent.max_calls         = 10
+
+    # Maximum concurrency for the Concurrent scenario [AHN_SIPP_TEST_CONCURRENT_MAX_CONCURRENT]
+    config.sipp_test.concurrent.max_concurrent    = 10
+
+    # Number of failed calls before exit [AHN_SIPP_TEST_CONCURRENT_MAX_FAILURES]
+    config.sipp_test.concurrent.max_failures      = 0
+
+    # Ramp-up rate for the Concurrent scenario [AHN_SIPP_TEST_CONCURRENT_RATE]
+    config.sipp_test.concurrent.rate              = 1
+
+    # Path from Adhearsion root to SippyCup template [AHN_SIPP_TEST_CONCURRENT_SCENARIO_LOCATION]
+    config.sipp_test.concurrent.scenario_location = "scenarios/concurrent"
+
+config.sipp_test.cps
+    # Number of calls per second (cps) [AHN_SIPP_TEST_CPS_CALLS_PER_SECOND]
+    config.sipp_test.cps.calls_per_second         = 1
+
+    # Maximum number of calls for the CPS scenario [AHN_SIPP_TEST_CPS_MAX_CALLS]
+    config.sipp_test.cps.max_calls                = 10
+
+    # Number of failed calls before exit [AHN_SIPP_TEST_CPS_MAX_FAILURES]
+    config.sipp_test.cps.max_failures             = 0
+
+    # Path from Adhearsion root to SippyCup template [AHN_SIPP_TEST_CPS_SCENARIO_LOCATION]
+    config.sipp_test.cps.scenario_location        = "scenarios/cps"
 ```
 
-More detail is available in the [deployment documentation](http://adhearsion.com/docs/best-practices/deployment).
-
-Check out [the Adhearsion website](http://adhearsion.com) for more details of where to go from here.
+These configuration options may be specified either via `config/adhearsion.rb` or via environment variables.
