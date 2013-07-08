@@ -24,10 +24,13 @@ namespace :sipp_test do
     pid = `cat log/adhearsion.pid`.chomp
     p "Starting Adhearsion with pid #{pid}..."
     sleep 10
-    [:concurrent, :cps].each do |type|
-      SippTest::Runner.new(type).run
+    begin
+      [:concurrent, :cps].each do |type|
+        SippTest::Runner.new(type).run
+      end
+    ensure
+      `kill #{pid}`
     end
-    `kill #{pid}`
   end
 
   desc "Runs a SIPp load test meant to test concurrency, fails if there are too many failed calls"
@@ -36,8 +39,11 @@ namespace :sipp_test do
     pid = `cat log/adhearsion.pid`.chomp
     p "Starting Adhearsion with pid #{pid}..."
     sleep 10
-    SippTest::Runner.new(:concurrent).run
-    `kill #{pid}`
+    begin
+      SippTest::Runner.new(:concurrent).run
+    ensure
+      `kill #{pid}`
+    end
   end
 
   desc "Runs a SIPp load test meant to test incoming call rate, fails if there are too many failed calls"
@@ -46,7 +52,10 @@ namespace :sipp_test do
     pid = `cat log/adhearsion.pid`.chomp
     p "Starting Adhearsion with pid #{pid}..."
     sleep 10
-    SippTest::Runner.new(:cps).run
-    `kill #{pid}`
+    begin
+      SippTest::Runner.new(:cps).run
+    ensure
+      `kill #{pid}`
+    end
   end
 end
