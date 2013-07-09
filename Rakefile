@@ -14,12 +14,13 @@ namespace :sipp_test do
   desc "Removes old SIPp scenarios and compiles new ones"
   task :compile => :environment do |t|
     [:cps, :concurrent].each do |type|
+      p "Compiling Scenario: #{type.to_s}"
       require File.expand_path("#{Adhearsion.config[:platform].root}/#{Adhearsion.config[:sipp_test][type].scenario_location}")
     end
   end
 
   desc "Runs a SIPp load test on both concurrent and cps-based scenarios, fails if they have too many failed calls"
-  task :run => :environment do |t|
+  task :run => :compile do |t|
     system "bundle exec ahn daemon --pid-file log/adhearsion.pid"
     pid = `cat log/adhearsion.pid`.chomp
     p "Starting Adhearsion with pid #{pid}..."
