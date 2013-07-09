@@ -4,6 +4,8 @@ This application runs SIPp loadtests through a rake task, and is suitable for lo
 
 ## Getting Started
 
+Due to bugs in a dependency [PacketFu](https://github.com/todb/packetfu/issues/28), this application currently requires Ruby 1.9.3 (NOT 2.0.0).
+
 The following steps will run a SIPp load test of Adhearsion:
 
 1. Get Asterisk
