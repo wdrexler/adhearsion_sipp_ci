@@ -37,8 +37,9 @@ end
 
 def run_test(*scenarios)
   system "bundle exec ahn daemon --pid-file log/adhearsion.pid"
-  pid = IO.read("log/adhearsion.pid").chomp.to_i
+  pid = File.read("log/adhearsion.pid").chomp.to_i
   begin
+    raise "Adhearsion PID not found!" unless pid
     p "Starting Adhearsion with pid #{pid}..."
     sleep 10
     Process.kill 0, pid #Make sure Adhearsion is running before we start the test
