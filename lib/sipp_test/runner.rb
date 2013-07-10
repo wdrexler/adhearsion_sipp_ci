@@ -1,7 +1,7 @@
 module SippTest
   class Runner
     attr_accessor :status
-    attr_reader :csv_path, :type
+    attr_reader :csv_path, :type, :sipp_pid
     def initialize(type)
       @type = type
       raise ArgumentError("Type #{@type} not supported!") unless @type == :concurrent || @type == :cps
@@ -28,7 +28,7 @@ module SippTest
       command << "-m #{cc_config.max_calls} -s #{@extension} #{sipp_config.to_ip} "
       command << "-trace_stat -stf #{@csv_path} -trace_err > /dev/null 2>&1"
       p "RUNNING COMMAND:\n #{command}"
-      spawn command
+      @sipp_pid = spawn command
       start_watcher
       self.status = :completed
     end

@@ -21,6 +21,8 @@ Adhearsion.config do |config|
     dev.platform.logging.level = :debug
   end
 
+  config.punchblock.reconnect_attempts = 1
+
   ##
   # Use with Rayo (eg Voxeo PRISM)
   #

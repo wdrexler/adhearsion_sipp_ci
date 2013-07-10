@@ -13,6 +13,12 @@ module SippTest
       @running = true
       while @running do
         sleep @polling
+        begin
+          Process.kill 0, @runner.sipp_pid
+        rescue Errno::ESRCH
+          @running = false
+          raise "SIPp has exited before the test has finished!"
+        end
         data = DataParser.parse(@runner.csv_path) if File.exists?(@runner.csv_path)
         @current = data
         next unless data
