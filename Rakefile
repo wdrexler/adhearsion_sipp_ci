@@ -21,60 +21,36 @@ namespace :sipp_test do
 
   desc "Runs a SIPp load test on both concurrent and cps-based scenarios, fails if they have too many failed calls"
   task :run => :compile do |t|
-    system "bundle exec ahn daemon --pid-file log/adhearsion.pid"
-    pid = `cat log/adhearsion.pid`.chomp
-    begin
-      p "Starting Adhearsion with pid #{pid}..."
-      sleep 10
-      Process.kill 0, pid.to_i #Make sure Adhearsion is running before we start the test
-
-      [:concurrent, :cps].each do |type|
-        SippTest::Runner.new(type).run
-      end
-    rescue => e
-      p e.inspect
-      `kill #{pid}`
-      exit 1
-    else
-      `kill #{pid}`
-    end
+    run_test :concurrent, :cps
   end
 
   desc "Runs a SIPp load test meant to test concurrency, fails if there are too many failed calls"
-  task :run_cc => :environment do |t|
-    system "bundle exec ahn daemon --pid-file log/adhearsion.pid"
-    pid = `cat log/adhearsion.pid`.chomp
-    begin
-      p "Starting Adhearsion with pid #{pid}..."
-      sleep 10
-      Process.kill 0, pid.to_i
-
-      SippTest::Runner.new(:concurrent).run
-    rescue => e
-      p e.inspect
-      `kill #{pid}`
-      exit 1
-    else
-      `kill #{pid}`
-    end
+  task :run_cc => :compile do |t|
+    run_test :concurrent
   end
 
   desc "Runs a SIPp load test meant to test incoming call rate, fails if there are too many failed calls"
-  task :run_cps => :environment do |t|
-    system "bundle exec ahn daemon --pid-file log/adhearsion.pid"
-    pid = `cat log/adhearsion.pid`.chomp
-    begin
-      p "Starting Adhearsion with pid #{pid}..."
-      sleep 10
-      Process.kill 0, pid.to_i
+  task :run_cps => :compile do |t|
+    run_test :cps
+  end
+end
 
-      SippTest::Runner.new(:cps).run
-    rescue => e
-      p e.inspect
-      `kill #{pid}`
-      exit 1
-    else
-      `kill #{pid}`
+def run_test(*scenarios)
+  system "bundle exec ahn daemon --pid-file log/adhearsion.pid"
+  pid = IO.read("log/adhearsion.pid").chomp.to_i
+  begin
+    p "Starting Adhearsion with pid #{pid}..."
+    sleep 10
+    Process.kill 0, pid #Make sure Adhearsion is running before we start the test
+
+    scenarios.each do |type|
+      SippTest::Runner.new(type).run
     end
+  rescue => e
+    p e.inspect
+    Process.kill 9, pid rescue nil
+    exit 1
+  else
+    Process.kill 9, pid rescue nil
   end
 end
