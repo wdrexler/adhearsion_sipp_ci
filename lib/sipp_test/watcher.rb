@@ -1,9 +1,9 @@
 module SippTest
   class Watcher
-    def initialize(runner, num_of_calls, polling = 3)
+    def initialize(runner, num_of_calls, interval = 3)
       @current = { time: 0, series: [[], [], []] }
       @running = false
-      @polling = polling
+      @interval = interval
       @runner = runner
       @num_calls = num_of_calls
     end
@@ -12,7 +12,7 @@ module SippTest
       @current = DataParser.parse(@runner.csv_path) if File.exists?(@runner.csv_path)
       @running = true
       while @running do
-        sleep @polling
+        sleep @interval
         begin
           Process.kill 0, @runner.sipp_pid
         rescue Errno::ESRCH
