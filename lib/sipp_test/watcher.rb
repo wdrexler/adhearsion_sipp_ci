@@ -17,7 +17,7 @@ module SippTest
           Process.kill 0, @runner.sipp_pid
         rescue Errno::ESRCH
           @running = false
-          raise "SIPp has exited before the test has finished!"
+          raise Errno::ESRCH.new "SIPp has exited before the test has finished!"
         end
         data = DataParser.parse(@runner.csv_path) if File.exists?(@runner.csv_path)
         @current = data

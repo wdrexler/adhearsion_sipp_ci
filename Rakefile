@@ -47,11 +47,10 @@ def run_test(*scenarios)
     scenarios.each do |type|
       SippTest::Runner.new(type).run
     end
-  rescue => e
+  rescue Errno::ESRCH => e
     p e.inspect
-    Process.kill 9, pid rescue nil
     exit 1
-  else
+  ensure
     Process.kill 9, pid rescue nil
   end
 end
